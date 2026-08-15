@@ -131,10 +131,10 @@ function Landing() {
 
     setLoading(true);
     try {
-      const url = import.meta.env.VITE_SUPABASE_URL;
+      const url = import.meta.env["VITE_SUPABASE_URL"];
       const key =
-        import.meta.env.VITE_SUPABASE_ANON_KEY ||
-        import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        import.meta.env["VITE_SUPABASE_ANON_KEY"] ||
+        import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
 
       if (!url || !key || url.includes("your-supabase") || url.includes("placeholder")) {
         toast.error("Please set your real VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the .env file.");
@@ -170,6 +170,11 @@ function Landing() {
         }
       } else {
         toast.success("You're on the list! We'll reach out the moment we launch.");
+        if (typeof window !== "undefined" && (window as any).fbq) {
+          (window as any).fbq("track", "Lead", {
+            content_name: "Vidya Loans Launch Interest",
+          });
+        }
         setForm({ name: "", mobile: "", email: "" });
       }
     } catch (err: any) {
